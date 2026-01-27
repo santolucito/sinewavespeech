@@ -1,0 +1,11 @@
+{
+  "utterances": [
+    {
+      "id": "where-were-you",
+      "title": "Where were you a year ago?",
+      "dataFile": "where-were-you.json",
+      "audioFile": "where-were-you.mp3"
+    }
+  ],
+  "defaultUtterance": "where-were-you"
+}

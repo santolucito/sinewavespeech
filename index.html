@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sinewave Speech Demo</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <main class="container">
+        <header>
+            <h1>Sinewave Speech</h1>
+            <p class="subtitle">A demonstration of top-down processing in speech perception</p>
+        </header>
+
+        <section class="introduction">
+            <p>Type any phrase and hear it as sinewave speech!</p>
+            <p class="hint">Most people hear only electronic whistles at first... until they hear the original.</p>
+        </section>
+
+        <section class="text-input-section">
+            <div class="text-input-wrapper">
+                <input type="text" id="text-input" class="text-input"
+                       placeholder="Type a phrase here..."
+                       value="Where were you a year ago?">
+                <button id="generate-btn" class="btn btn-generate">Generate</button>
+            </div>
+            <div class="example-phrases">
+                <span class="example-label">Try:</span>
+                <button class="example-btn" data-text="Where were you a year ago?">Where were you a year ago?</button>
+                <button class="example-btn" data-text="Hello world">Hello world</button>
+                <button class="example-btn" data-text="The quick brown fox">The quick brown fox</button>
+            </div>
+        </section>
+
+        <section class="player-controls">
+            <div class="primary-buttons">
+                <button id="play-sinewave" class="btn btn-primary" disabled>
+                    Play Sinewave
+                </button>
+                <button id="reveal-original" class="btn btn-secondary" disabled>
+                    Hear Original
+                </button>
+                <button id="replay-sinewave" class="btn btn-accent" disabled>
+                    Play Sinewave Again
+                </button>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+                <span id="time-display" class="time-display">0:00 / 0:00</span>
+            </div>
+        </section>
+
+        <section class="formant-controls">
+            <h3>Formant Controls</h3>
+            <div class="formant-toggles">
+                <label class="formant-toggle" style="--formant-color: #e63946">
+                    <input type="checkbox" id="toggle-f1" checked>
+                    <span class="toggle-label">F1</span>
+                </label>
+                <label class="formant-toggle" style="--formant-color: #457b9d">
+                    <input type="checkbox" id="toggle-f2" checked>
+                    <span class="toggle-label">F2</span>
+                </label>
+                <label class="formant-toggle" style="--formant-color: #2a9d8f">
+                    <input type="checkbox" id="toggle-f3" checked>
+                    <span class="toggle-label">F3</span>
+                </label>
+            </div>
+            <div class="volume-control">
+                <label for="volume-slider">Volume</label>
+                <input type="range" id="volume-slider" min="0" max="100" value="70">
+            </div>
+        </section>
+
+        <section id="transcript-section" class="transcript" hidden>
+            <h3>Transcript</h3>
+            <p id="transcript-text" class="transcript-text"></p>
+        </section>
+
+        <section class="visualization">
+            <canvas id="formant-canvas" width="600" height="200"></canvas>
+        </section>
+
+        <section class="explanation">
+            <h2>What is Sinewave Speech?</h2>
+            <p>
+                Sinewave speech is a form of artificially degraded speech where the
+                complex acoustic signal is replaced by just three pure sine waves
+                that track the frequencies of the first three <strong>formants</strong>
+                (resonant frequencies of the vocal tract).
+            </p>
+            <p>
+                Despite losing nearly all of the original acoustic information,
+                listeners can perceive these simple tones as speech&mdash;but typically
+                only <em>after</em> they've heard the original. This demonstrates
+                <strong>top-down processing</strong>: once your brain knows what to
+                expect, it can extract meaning from incredibly impoverished signals.
+            </p>
+            <h3>The Science</h3>
+            <p>
+                This phenomenon was first described by Remez et al. (1981) and has
+                become a classic demonstration in psycholinguistics and cognitive
+                science. It shows that speech perception isn't purely bottom-up
+                (analyzing the acoustic signal), but involves active prediction and
+                pattern completion by the brain.
+            </p>
+        </section>
+
+        <footer>
+            <p>
+                Based on research by Remez, Rubin, Pisoni, & Carrell (1981).
+                <a href="https://en.wikipedia.org/wiki/Sine_wave_speech" target="_blank">Learn more</a>
+            </p>
+        </footer>
+    </main>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
