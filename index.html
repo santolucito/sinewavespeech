@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sinewave Speech Demo</title>
     <link rel="stylesheet" href="css/styles.css">
+    <!-- meSpeak.js for TTS audio capture -->
+    <script src="lib/mespeak/mespeak.js"></script>
 </head>
 <body>
     <main class="container">
@@ -24,6 +26,10 @@
                        placeholder="Type a phrase here..."
                        value="Where were you a year ago?">
                 <button id="generate-btn" class="btn btn-generate">Generate</button>
+            </div>
+            <div id="analysis-status" class="analysis-status" hidden>
+                <span class="spinner"></span>
+                <span class="status-text">Analyzing speech with LPC...</span>
             </div>
             <div class="example-phrases">
                 <span class="example-label">Try:</span>

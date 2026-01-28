@@ -510,6 +510,35 @@ footer a:hover {
     pointer-events: none;
 }
 
+/* Analysis Status */
+.analysis-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    background: var(--color-surface-alt);
+    border-radius: var(--border-radius);
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+.analysis-status .spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--color-surface);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 /* Hidden utility */
 [hidden] {
     display: none !important;

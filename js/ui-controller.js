@@ -25,7 +25,8 @@ export class UIController {
             toggleF3: document.getElementById('toggle-f3'),
             canvas: document.getElementById('formant-canvas'),
             transcriptSection: document.getElementById('transcript-section'),
-            transcriptText: document.getElementById('transcript-text')
+            transcriptText: document.getElementById('transcript-text'),
+            analysisStatus: document.getElementById('analysis-status')
         };
 
         this.canvasCtx = this.elements.canvas.getContext('2d');
@@ -92,22 +93,44 @@ export class UIController {
         this.player.onPlaybackEnd = () => {
             this.handlePlaybackEnd();
         };
+
+        this.player.onAnalysisStart = () => {
+            this.showAnalysisStatus(true);
+        };
+
+        this.player.onAnalysisComplete = () => {
+            this.showAnalysisStatus(false);
+        };
+    }
+
+    /**
+     * Show or hide analysis status indicator
+     */
+    showAnalysisStatus(show) {
+        if (this.elements.analysisStatus) {
+            this.elements.analysisStatus.hidden = !show;
+        }
     }
 
     /**
      * Handle Generate button click
      */
-    handleGenerate() {
+    async handleGenerate() {
         const text = this.elements.textInput.value.trim();
         if (!text) return;
 
         try {
-            this.player.generateFromText(text);
-            this.state = 'generated';
-            this.hasHeardOriginal = false;
+            // Disable generate button during analysis
+            this.elements.generateBtn.disabled = true;
 
             // Hide transcript when generating new
             this.elements.transcriptSection.hidden = true;
+
+            // Generate with LPC analysis (async)
+            await this.player.generateFromText(text);
+
+            this.state = 'generated';
+            this.hasHeardOriginal = false;
 
             // Update visualization
             this.drawVisualization();
@@ -117,8 +140,12 @@ export class UIController {
 
             // Reset progress
             this.updateProgress(0, 0, this.player.getDuration());
+
         } catch (e) {
             console.error('Error generating:', e);
+            this.showAnalysisStatus(false);
+        } finally {
+            this.elements.generateBtn.disabled = false;
         }
     }
 

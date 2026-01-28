@@ -189,7 +189,7 @@ export class AudioEngine {
     }
 
     /**
-     * Play original audio
+     * Play original audio from loaded file
      */
     async playOriginal() {
         await this.init();
@@ -213,6 +213,53 @@ export class AudioEngine {
         this.originalSource.start(startTime);
         this.isPlaying = true;
         this.startProgressTracking(this.originalBuffer.duration);
+
+        this.originalSource.onended = () => {
+            this.handlePlaybackEnd();
+        };
+    }
+
+    /**
+     * Play original audio from Float32Array buffer
+     * @param {Float32Array} audioData - Audio samples
+     * @param {number} sampleRate - Sample rate of the audio data
+     * @param {number} targetDuration - Optional target duration to match (adjusts playback rate)
+     */
+    async playOriginalBuffer(audioData, sampleRate, targetDuration = null) {
+        await this.init();
+
+        if (this.isPlaying) {
+            this.stop();
+        }
+
+        // Create AudioBuffer from Float32Array
+        const audioBuffer = this.audioContext.createBuffer(1, audioData.length, sampleRate);
+        const channelData = audioBuffer.getChannelData(0);
+        channelData.set(audioData);
+
+        this.originalSource = this.audioContext.createBufferSource();
+        this.originalSource.buffer = audioBuffer;
+        this.originalSource.connect(this.originalGain);
+
+        // Adjust playback rate if target duration specified
+        const actualDuration = audioBuffer.duration;
+        let effectiveDuration = actualDuration;
+
+        if (targetDuration && targetDuration > 0) {
+            // Slow down or speed up to match target duration
+            const playbackRate = actualDuration / targetDuration;
+            // Clamp to reasonable range (0.5x to 2x speed)
+            this.originalSource.playbackRate.value = Math.max(0.5, Math.min(2.0, playbackRate));
+            effectiveDuration = targetDuration;
+        }
+
+        const startTime = this.audioContext.currentTime + 0.05;
+        this.playbackStartTime = startTime;
+        this.currentDuration = effectiveDuration;
+
+        this.originalSource.start(startTime);
+        this.isPlaying = true;
+        this.startProgressTracking(effectiveDuration);
 
         this.originalSource.onended = () => {
             this.handlePlaybackEnd();
